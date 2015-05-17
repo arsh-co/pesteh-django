@@ -55,3 +55,23 @@ docs/_build/
 
 # PyBuilder
 target/
+/.pydevproject
+/.settings
+/.idea
+/.sonar
+/doc/_build
+.coverage
+htmlcov
+Thumbs.db
+.DS_Store
+*~
+*.prefs
+*.pyc
+*.orig
+*.db
+*.sqlite
+*.sqlite3
+/venv/*
+media/
+/os
+/sys
