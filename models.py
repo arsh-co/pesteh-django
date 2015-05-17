@@ -1,10 +1,21 @@
 from django.conf import settings
-from django.db import models
+from django.db import models, IntegrityError
+
+from pesteh import generate_user_token
 
 
 class PestehUser(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, unique=True)
     user_token = models.CharField(max_length=63, unique=True)
+
+    def save(self, *args, **kwargs):
+        while True:
+            try:
+                super(PestehUser, self).save(*args, **kwargs)
+            except IntegrityError:
+                self.user_token = generate_user_token()
+            else:
+                return
 
 
 class Device(models.Model):
