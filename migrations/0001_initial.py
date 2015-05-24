@@ -8,29 +8,22 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'PestehUser'
-        db.create_table(u'pesteh_pestehuser', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['base.Member'], unique=True)),
-            ('user_token', self.gf('django.db.models.fields.CharField')(unique=True, max_length=63)),
-        ))
-        db.send_create_signal(u'pesteh', ['PestehUser'])
-
         # Adding model 'Device'
         db.create_table(u'pesteh_device', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('pesteh_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['pesteh.PestehUser'], null=True, blank=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['base.Member'], null=True)),
             ('token', self.gf('django.db.models.fields.CharField')(unique=True, max_length=127)),
         ))
         db.send_create_signal(u'pesteh', ['Device'])
 
         # Adding model 'Message'
         db.create_table(u'pesteh_message', (
-            ('message_id', self.gf('django.db.models.fields.CharField')(max_length=63, primary_key=True)),
-            ('timestamp', self.gf('django.db.models.fields.DateTimeField')()),
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('message_id', self.gf('django.db.models.fields.CharField')(max_length=63, null=True)),
+            ('timestamp', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2015, 5, 24, 0, 0))),
             ('body', self.gf('django.db.models.fields.TextField')()),
             ('type', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['pesteh.PestehUser'], null=True)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['base.Member'])),
         ))
         db.send_create_signal(u'pesteh', ['Message'])
 
@@ -45,9 +38,6 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'PestehUser'
-        db.delete_table(u'pesteh_pestehuser')
-
         # Deleting model 'Device'
         db.delete_table(u'pesteh_device')
 
@@ -170,23 +160,18 @@ class Migration(SchemaMigration):
         u'pesteh.device': {
             'Meta': {'object_name': 'Device'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'pesteh_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['pesteh.PestehUser']", 'null': 'True', 'blank': 'True'}),
-            'token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '127'})
+            'token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '127'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['base.Member']", 'null': 'True'})
         },
         u'pesteh.message': {
             'Meta': {'object_name': 'Message'},
             'body': ('django.db.models.fields.TextField', [], {}),
             'devices': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['pesteh.Device']", 'symmetrical': 'False'}),
-            'message_id': ('django.db.models.fields.CharField', [], {'max_length': '63', 'primary_key': 'True'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {}),
-            'type': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['pesteh.PestehUser']", 'null': 'True'})
-        },
-        u'pesteh.pestehuser': {
-            'Meta': {'object_name': 'PestehUser'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['base.Member']", 'unique': 'True'}),
-            'user_token': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '63'})
+            'message_id': ('django.db.models.fields.CharField', [], {'max_length': '63', 'null': 'True'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2015, 5, 24, 0, 0)'}),
+            'type': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['base.Member']"})
         }
     }
 

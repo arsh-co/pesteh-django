@@ -13,14 +13,11 @@ def send_request(url, data, use_client_id=True, use_client_secret=True):
         data.update({'client_secret': settings.PESTEH_CLIENT_SECRET})
     params = json.dumps(data)
     h = httplib2.Http()
-    resp, content = h.request(url, body=params, method="POST")
+    resp, content = h.request(url, body=params, method="POST", headers={u"content-type": 'application/json'})
     return json.loads(content)
 
 
-def generate_user_token():
-    import string
-    import random
-
-    chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
-    random_id = ''.join(random.choice(chars) for _ in range(50))
-    return u"PESTEH-ut-P{}".format(random_id)
+def generate_user_token(user):
+    if not user.is_authenticated():
+        return None
+    return u"PESTEH-ut-P{}".format(user.id)
