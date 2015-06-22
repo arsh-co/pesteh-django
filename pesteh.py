@@ -12,7 +12,7 @@ def send_request(url, data, use_client_id=True, use_client_secret=True):
     if use_client_secret:
         data.update({'client_secret': settings.PESTEH_CLIENT_SECRET})
     params = json.dumps(data)
-    h = httplib2.Http()
+    h = httplib2.Http(".cache", disable_ssl_certificate_validation=True)
     resp, content = h.request(url, body=params, method="POST", headers={u"content-type": 'application/json'})
     return json.loads(content)
 
