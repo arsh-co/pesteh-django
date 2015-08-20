@@ -13,7 +13,7 @@ class Device(models.Model):
 
 class Message(models.Model):
     message_id = models.CharField(max_length=63, null=True)
-    timestamp = models.DateTimeField(default=datetime.datetime.now())
+    timestamp = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
     type = models.TextField(null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
