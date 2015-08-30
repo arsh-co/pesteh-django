@@ -2,6 +2,8 @@
 
 from django.conf import settings
 import requests
+from requests.packages.urllib3.connection import ConnectionError
+import time
 
 
 def send_request(url, data, use_client_id=True, use_client_secret=True):
@@ -12,7 +14,16 @@ def send_request(url, data, use_client_id=True, use_client_secret=True):
     if use_client_secret:
         data.update({'client_secret': settings.PESTEH_CLIENT_SECRET})
     params = json.dumps(data)
-    resp = requests.post(url, data=params, headers={u"content-type": 'application/json'})
+
+    c = 0
+    while c < 100:
+        c += 1
+        try:
+            resp = requests.post(url, data=params, headers={u"content-type": 'application/json'})
+        except ConnectionError:
+            time.sleep(0.05)
+        else:
+            break
     return json.loads(resp.content)
 
 
