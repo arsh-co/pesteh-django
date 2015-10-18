@@ -5,8 +5,7 @@ import requests
 from requests.packages.urllib3 import Retry
 from requests.packages.urllib3.connection import ConnectionError
 import time
-
-from pesteh.consts import MAX_RETRIES
+from .consts import MAX_RETRIES
 
 
 def send_request(url, data, use_client_id=True, use_client_secret=True):
@@ -30,8 +29,8 @@ def send_request(url, data, use_client_id=True, use_client_secret=True):
         except ConnectionError:
             time.sleep(0.05)
         else:
-            break
-    return json.loads(resp.content)
+            return json.loads(resp.content)
+    return {}
 
 
 def generate_user_token(user):
