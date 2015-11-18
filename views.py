@@ -4,7 +4,7 @@ from dateutil.parser import parse
 from django.conf import settings
 from django.http import HttpResponse
 
-from consts import SEND_MESSAGE_URL, REGISTER_DEVICE_URL
+from consts import SEND_MESSAGE_URL, REGISTER_DEVICE_URL, EDIT_MESSAGE_URL
 from models import Device
 from pesteh import send_request, generate_user_token
 
@@ -37,4 +37,13 @@ def send_pesteh_message(message):
     message.timestamp = message_obj.get('timestamp')
     message.message_id = message_obj.get('message_id')
     message.save()
+    return {u"result": u"success"}
+
+
+def edit_pesteh_message(message, action):
+    data = {
+        u'action': action,
+        u'message_id': message.message_id,
+    }
+    result = send_request(EDIT_MESSAGE_URL, data)
     return {u"result": u"success"}
