@@ -24,8 +24,9 @@ class Message(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        try:
-            self.body = json.dumps(self.body)
-        except ValueError and TypeError:
-            pass
+        if isinstance(self.body, dict):
+            try:
+                self.body = json.dumps(self.body)
+            except ValueError and TypeError:
+                pass
         super(Message, self).save()
