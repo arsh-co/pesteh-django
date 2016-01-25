@@ -32,9 +32,9 @@ def send_request(url, data, use_client_id=True, use_client_secret=True):
             else:
                 if resp.status_code == 200:
                     return json.loads(resp.content)
-        else:
-            resp = s.post(url, data=params, headers={u"content-type": 'application/json'})
-            return json.loads(resp.content)
+    else:
+        resp = s.post(url, data=params, headers={u"content-type": 'application/json'})
+        return json.loads(resp.content)
     return {}
 
 

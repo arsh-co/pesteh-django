@@ -12,8 +12,10 @@ from pesteh import send_request, generate_user_token
 def register_pesteh_device(request):
     data = {u"user_id": generate_user_token(request.user)}
     result = send_request(REGISTER_DEVICE_URL, data)
-    Device.objects.create(token=result.get(u"token"))
-    return HttpResponse(json.dumps(result), content_type=u'application/json')
+    if result:
+        Device.objects.create(token=result.get(u"token"))
+        return HttpResponse(json.dumps(result), content_type=u'application/json')
+    return HttpResponse(json.dumps({}), content_type=u'application/json')
 
 
 def send_pesteh_message(message):
